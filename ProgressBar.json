@@ -1,6 +1,6 @@
 {
   "author": "Tristan Rhodes (https://victrisgames.itch.io/)",
-  "description": "Add this behavior to a shape painter object.\n\nChoose color, default rounding or change them with actions\n\nThanks,\nJj",
+  "description": "Add this behavior to a shape painter object.\n\nDefine sizes, rectangle Radius and, percentage value in object behaviors parameter tab.\n\nChoose colors, rounding or change them with actions",
   "extensionNamespace": "",
   "fullName": "Progress Bar",
   "helpPath": "https://github.com/jumpingjh",
@@ -16,12 +16,14 @@
     "ui",
     "widget"
   ],
-  "authorIds": [],
+  "authorIds": [
+    "d3nXdYrxJxP0Uy0NimIH1jlw6zd2"
+  ],
   "dependencies": [],
   "eventsFunctions": [],
   "eventsBasedBehaviors": [
     {
-      "description": "Show a progress bar  anddefine layotand percentage.",
+      "description": "Show a progress bar and define the percentage.\nYou can set colors, sizes, Rectangle Radius and, of course, percentage value.",
       "fullName": "Progress  Bar",
       "name": "ProgressBar",
       "objectType": "PrimitiveDrawing::Drawer",
@@ -34,6 +36,21 @@
           "private": false,
           "sentence": "",
           "events": [
+            {
+              "disabled": false,
+              "folded": false,
+              "type": "BuiltinCommonInstructions::Comment",
+              "color": {
+                "b": 109,
+                "g": 230,
+                "r": 255,
+                "textB": 0,
+                "textG": 0,
+                "textR": 0
+              },
+              "comment": "Make sure object doesn't get re-drawn every frame",
+              "comment2": ""
+            },
             {
               "disabled": false,
               "folded": false,
@@ -53,21 +70,6 @@
                 }
               ],
               "events": []
-            },
-            {
-              "disabled": false,
-              "folded": false,
-              "type": "BuiltinCommonInstructions::Comment",
-              "color": {
-                "b": 109,
-                "g": 230,
-                "r": 255,
-                "textB": 0,
-                "textG": 0,
-                "textR": 0
-              },
-              "comment": "Make sure object doesn't get re-drawn every frame",
-              "comment2": ""
             }
           ],
           "parameters": [
@@ -98,7 +100,7 @@
           "description": "",
           "fullName": "",
           "functionType": "Action",
-          "name": "doStepPostEvents",
+          "name": "doStepPreEvents",
           "private": false,
           "sentence": "",
           "events": [
@@ -110,33 +112,13 @@
                 {
                   "type": {
                     "inverted": false,
-                    "value": "BuiltinCommonInstructions::Or"
+                    "value": "ProgressBar::ProgressBar::PropertyNeedRedraw"
                   },
-                  "parameters": [],
-                  "subInstructions": [
-                    {
-                      "type": {
-                        "inverted": false,
-                        "value": "ProgressBar::ProgressBar::PropertyNeedRedraw"
-                      },
-                      "parameters": [
-                        "Object",
-                        "Behavior"
-                      ],
-                      "subInstructions": []
-                    },
-                    {
-                      "type": {
-                        "inverted": true,
-                        "value": "ProgressBar::ProgressBar::PropertyNeedRedraw"
-                      },
-                      "parameters": [
-                        "Object",
-                        "Behavior"
-                      ],
-                      "subInstructions": []
-                    }
-                  ]
+                  "parameters": [
+                    "Object",
+                    "Behavior"
+                  ],
+                  "subInstructions": []
                 }
               ],
               "actions": [
@@ -165,76 +147,90 @@
               ],
               "events": [
                 {
+                  "colorB": 228,
+                  "colorG": 176,
+                  "colorR": 74,
+                  "creationTime": 0,
                   "disabled": false,
                   "folded": false,
-                  "type": "BuiltinCommonInstructions::Standard",
-                  "conditions": [
+                  "name": "The percentage value must be from 0 to 100",
+                  "source": "",
+                  "type": "BuiltinCommonInstructions::Group",
+                  "events": [
                     {
-                      "type": {
-                        "inverted": false,
-                        "value": "ProgressBar::ProgressBar::PropertyBarPercentage"
-                      },
-                      "parameters": [
-                        "Object",
-                        "Behavior",
-                        ">",
-                        "100"
+                      "disabled": false,
+                      "folded": false,
+                      "type": "BuiltinCommonInstructions::Standard",
+                      "conditions": [
+                        {
+                          "type": {
+                            "inverted": false,
+                            "value": "ProgressBar::ProgressBar::PropertyBarPercentage"
+                          },
+                          "parameters": [
+                            "Object",
+                            "Behavior",
+                            "<",
+                            "0"
+                          ],
+                          "subInstructions": []
+                        }
                       ],
-                      "subInstructions": []
+                      "actions": [
+                        {
+                          "type": {
+                            "inverted": false,
+                            "value": "ProgressBar::ProgressBar::SetPropertyBarPercentage"
+                          },
+                          "parameters": [
+                            "Object",
+                            "Behavior",
+                            "=",
+                            "0"
+                          ],
+                          "subInstructions": []
+                        }
+                      ],
+                      "events": []
+                    },
+                    {
+                      "disabled": false,
+                      "folded": false,
+                      "type": "BuiltinCommonInstructions::Standard",
+                      "conditions": [
+                        {
+                          "type": {
+                            "inverted": false,
+                            "value": "ProgressBar::ProgressBar::PropertyBarPercentage"
+                          },
+                          "parameters": [
+                            "Object",
+                            "Behavior",
+                            ">",
+                            "100"
+                          ],
+                          "subInstructions": []
+                        }
+                      ],
+                      "actions": [
+                        {
+                          "type": {
+                            "inverted": false,
+                            "value": "ProgressBar::ProgressBar::SetPropertyBarPercentage"
+                          },
+                          "parameters": [
+                            "Object",
+                            "Behavior",
+                            "=",
+                            "100"
+                          ],
+                          "subInstructions": []
+                        }
+                      ],
+                      "events": []
                     }
                   ],
-                  "actions": [
-                    {
-                      "type": {
-                        "inverted": false,
-                        "value": "ProgressBar::ProgressBar::SetPropertyBarPercentage"
-                      },
-                      "parameters": [
-                        "Object",
-                        "Behavior",
-                        "=",
-                        "100"
-                      ],
-                      "subInstructions": []
-                    }
-                  ],
-                  "events": []
-                },
-                {
-                  "disabled": false,
-                  "folded": false,
-                  "type": "BuiltinCommonInstructions::Standard",
-                  "conditions": [
-                    {
-                      "type": {
-                        "inverted": false,
-                        "value": "ProgressBar::ProgressBar::PropertyBarPercentage"
-                      },
-                      "parameters": [
-                        "Object",
-                        "Behavior",
-                        "<",
-                        "0"
-                      ],
-                      "subInstructions": []
-                    }
-                  ],
-                  "actions": [
-                    {
-                      "type": {
-                        "inverted": false,
-                        "value": "ProgressBar::ProgressBar::SetPropertyBarPercentage"
-                      },
-                      "parameters": [
-                        "Object",
-                        "Behavior",
-                        "=",
-                        "0"
-                      ],
-                      "subInstructions": []
-                    }
-                  ],
-                  "events": []
+                  "parameters": []
                 },
                 {
                   "colorB": 228,
@@ -243,7 +239,7 @@
                   "creationTime": 0,
                   "disabled": false,
                   "folded": false,
-                  "name": "BackGround",
+                  "name": "BackGround Box",
                   "source": "",
                   "type": "BuiltinCommonInstructions::Group",
                   "events": [
@@ -271,28 +267,6 @@
                         {
                           "type": {
                             "inverted": false,
-                            "value": "PrimitiveDrawing::FillColor"
-                          },
-                          "parameters": [
-                            "Object",
-                            "Object.Behavior::PropertyBarFillColor()"
-                          ],
-                          "subInstructions": []
-                        },
-                        {
-                          "type": {
-                            "inverted": false,
-                            "value": "PrimitiveDrawing::OutlineColor"
-                          },
-                          "parameters": [
-                            "Object",
-                            "Object.Behavior::PropertyBarFillColor()"
-                          ],
-                          "subInstructions": []
-                        },
-                        {
-                          "type": {
-                            "inverted": false,
                             "value": "PrimitiveDrawing::OutlineSize"
                           },
                           "parameters": [
@@ -303,7 +277,28 @@
                           "subInstructions": []
                         }
                       ],
-                      "events": []
+                      "events": [
+                        {
+                          "disabled": false,
+                          "folded": false,
+                          "type": "BuiltinCommonInstructions::Standard",
+                          "conditions": [],
+                          "actions": [
+                            {
+                              "type": {
+                                "inverted": false,
+                                "value": "PrimitiveDrawing::FillColor"
+                              },
+                              "parameters": [
+                                "Object",
+                                "Object.Behavior::PropertyBarFillColor()"
+                              ],
+                              "subInstructions": []
+                            }
+                          ],
+                          "events": []
+                        }
+                      ]
                     }
                   ],
                   "parameters": []
@@ -315,7 +310,7 @@
                   "creationTime": 0,
                   "disabled": false,
                   "folded": false,
-                  "name": "Barcode",
+                  "name": "Progress bar box",
                   "source": "",
                   "type": "BuiltinCommonInstructions::Group",
                   "events": [
@@ -339,6 +334,18 @@
                             "Object.Behavior::PropertyBarRadius()"
                           ],
                           "subInstructions": []
+                        },
+                        {
+                          "type": {
+                            "inverted": false,
+                            "value": "PrimitiveDrawing::OutlineSize"
+                          },
+                          "parameters": [
+                            "Object",
+                            "=",
+                            "0"
+                          ],
+                          "subInstructions": []
                         }
                       ],
                       "events": [
@@ -358,29 +365,6 @@
                                 "Object.Behavior::PropertyBarOutLineColor()"
                               ],
                               "subInstructions": []
-                            },
-                            {
-                              "type": {
-                                "inverted": false,
-                                "value": "PrimitiveDrawing::OutlineColor"
-                              },
-                              "parameters": [
-                                "Object",
-                                "Object.Behavior::PropertyBarOutLineColor()"
-                              ],
-                              "subInstructions": []
-                            },
-                            {
-                              "type": {
-                                "inverted": false,
-                                "value": "PrimitiveDrawing::OutlineSize"
-                              },
-                              "parameters": [
-                                "Object",
-                                "=",
-                                "0"
-                              ],
-                              "subInstructions": []
                             }
                           ],
                           "events": []
@@ -391,6 +375,60 @@
                   "parameters": []
                 }
               ]
+            }
+          ],
+          "parameters": [
+            {
+              "codeOnly": false,
+              "defaultValue": "",
+              "description": "Object",
+              "longDescription": "",
+              "name": "Object",
+              "optional": false,
+              "supplementaryInformation": "PrimitiveDrawing::Drawer",
+              "type": "object"
+            },
+            {
+              "codeOnly": false,
+              "defaultValue": "",
+              "description": "Behavior",
+              "longDescription": "",
+              "name": "Behavior",
+              "optional": false,
+              "supplementaryInformation": "ProgressBar::ProgressBar",
+              "type": "behavior"
+            }
+          ],
+          "objectGroups": []
+        },
+        {
+          "description": "Redraw the Progress bar",
+          "fullName": "Redraw the Progress bar",
+          "functionType": "Action",
+          "name": "SetNeedRedraw",
+          "private": false,
+          "sentence": "Redraw the Progress bar of _PARAM0_",
+          "events": [
+            {
+              "disabled": false,
+              "folded": false,
+              "type": "BuiltinCommonInstructions::Standard",
+              "conditions": [],
+              "actions": [
+                {
+                  "type": {
+                    "inverted": false,
+                    "value": "ProgressBar::ProgressBar::SetPropertyNeedRedraw"
+                  },
+                  "parameters": [
+                    "Object",
+                    "Behavior",
+                    "yes"
+                  ],
+                  "subInstructions": []
+                }
+              ],
+              "events": []
             }
           ],
           "parameters": [
@@ -446,7 +484,7 @@
                 {
                   "type": {
                     "inverted": false,
-                    "value": "DraggableSliderControl::DraggableSliderControl::SetPropertyNeedRedraw"
+                    "value": "ProgressBar::ProgressBar::SetPropertyNeedRedraw"
                   },
                   "parameters": [
                     "Object",
@@ -510,24 +548,24 @@
                 {
                   "type": {
                     "inverted": false,
-                    "value": "DraggableSliderControl::DraggableSliderControl::SetPropertyNeedRedraw"
-                  },
-                  "parameters": [
-                    "Object",
-                    "Behavior",
-                    "yes"
-                  ],
-                  "subInstructions": []
-                },
-                {
-                  "type": {
-                    "inverted": false,
                     "value": "ProgressBar::ProgressBar::SetPropertyBarOutLineColor"
                   },
                   "parameters": [
                     "Object",
                     "Behavior",
                     "GetArgumentAsString(\"Value\")"
+                  ],
+                  "subInstructions": []
+                },
+                {
+                  "type": {
+                    "inverted": false,
+                    "value": "ProgressBar::ProgressBar::SetPropertyNeedRedraw"
+                  },
+                  "parameters": [
+                    "Object",
+                    "Behavior",
+                    "yes"
                   ],
                   "subInstructions": []
                 }
@@ -676,7 +714,7 @@
                 {
                   "type": {
                     "inverted": false,
-                    "value": "DraggableSliderControl::DraggableSliderControl::SetPropertyNeedRedraw"
+                    "value": "ProgressBar::ProgressBar::SetPropertyNeedRedraw"
                   },
                   "parameters": [
                     "Object",
@@ -753,7 +791,7 @@
                 {
                   "type": {
                     "inverted": false,
-                    "value": "DraggableSliderControl::DraggableSliderControl::SetPropertyNeedRedraw"
+                    "value": "ProgressBar::ProgressBar::SetPropertyNeedRedraw"
                   },
                   "parameters": [
                     "Object",
@@ -830,7 +868,7 @@
                 {
                   "type": {
                     "inverted": false,
-                    "value": "DraggableSliderControl::DraggableSliderControl::SetPropertyNeedRedraw"
+                    "value": "ProgressBar::ProgressBar::SetPropertyNeedRedraw"
                   },
                   "parameters": [
                     "Object",
@@ -907,7 +945,7 @@
                 {
                   "type": {
                     "inverted": false,
-                    "value": "DraggableSliderControl::DraggableSliderControl::SetPropertyNeedRedraw"
+                    "value": "ProgressBar::ProgressBar::SetPropertyNeedRedraw"
                   },
                   "parameters": [
                     "Object",
@@ -958,7 +996,7 @@
           "description": "Percenate value",
           "fullName": "Track width",
           "functionType": "Expression",
-          "name": "GetPercentage",
+          "name": "Percentage",
           "private": false,
           "sentence": "",
           "events": [
